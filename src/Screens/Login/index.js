@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import Snackbar from 'react-native-snackbar';
 import { useDispatch } from 'react-redux';
-import { login } from '../../Redux/action.js';
+import { login, setToken } from '../../Redux/action.js';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -32,7 +32,8 @@ const Login = () => {
         })
         .then(response => {
           // Handle the response
-          const accessToken = response.data.access_token.token;
+          const token = response.data.access_token.token;
+          dispatch(setToken(token));
           Snackbar.show({
             text: 'Logged In Successfully',
             duration: Snackbar.LENGTH_SHORT,
