@@ -1,10 +1,10 @@
-import React, {useEffect,useState} from 'react';
+import React, {useCallback, useEffect,useState} from 'react';
 import {ScrollView, StatusBar, View, Text, FlatList} from 'react-native';
 import styles from './styles';
 import colors from '../../Constants/colors';
 import CustomHeader from '../../Components/CustomHeader';
 import CustomButton from '../../Components/CustomButton.js';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
@@ -12,53 +12,45 @@ const QuestionList = () => {
   const navigation = useNavigation();
   const [dataList, setDataList] = useState([]);
 
-  const data = [
-    {
-      question: 'Where is this institute situated ?',
-      desc: 'It is a long established fact that a reader will be distracted by the readable content of a page when too',
-      answerNo: 0,
-    },
-
-    {
-      question: 'Is this institute good ?',
-      desc: 'I would like to know if this institute is good for python course',
-      answerNo: 1,
-    },
-  ];
-
   const token = useSelector(state => state.token);
 
   const questionList = () => {
     axios
       .get('https://portal.learnabble.xyz/api/v2/accounts/me/questions', {
         headers: {
-          Authorization: `Bearer ${{token}}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then(response => {
         // Handle the response
-        console.log("response : ",response)
+       // console.log("response : ",response.data.results)
+        setDataList(response.data.results)
+        console.log("dataList : ",dataList)
       })
       .catch(error => {
         // Handle error
         console.log('Questions Error:', error);
       });
+      
 
   };
 
-  useEffect(() => {
-    questionList()
-  }, []); 
+  useFocusEffect(
+    useCallback(() => {
+      questionList();
+      
+    }, [])
+  );
 
- 
+ console.log("dataList : ",dataList);
 
   const RenderItem = ({item, index}) => {
     return (
       <View style={styles.box}>
-        <Text style={styles.question}>{item.question}</Text>
-        <Text style={styles.de}>{item.desc}</Text>
+        <Text style={styles.question}>{item.title}</Text>
+        <Text style={styles.de}>{item.description}</Text>
         <View style={styles.subBox}>
-          <Text style={styles.text}>{item.answerNo} answer</Text>
+          <Text style={styles.text}>{item.answers_count} answer</Text>
           <Text style={styles.text}>comments</Text>
         </View>
       </View>
@@ -87,8 +79,9 @@ const QuestionList = () => {
         />
       </View>
 
+
       <FlatList
-        data={data}
+        data={dataList}
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled
         keyExtractor={(item, index) => String(index)}
