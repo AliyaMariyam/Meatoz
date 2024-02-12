@@ -4,10 +4,10 @@ import colors from '../../Constants/colors';
 const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.primaryGreen,
     justifyContent: 'space-between',
     paddingHorizontal: 10,
-    paddingVertical: 18,
+    paddingVertical: 9,
     flexDirection: 'row',
     borderBottomWidth: 2,
     borderBottomColor: colors.lightGrey,
@@ -24,14 +24,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   img: {
-    width: 20,
-    height: 20,
+    width: 50,
+    height: 50,
     marginRight: 10,
   },
   text1: {
-    fontSize: 22,
-    color: colors.black,
-    fontWeight: '300',
+    fontSize: 28,
+    color: colors.white,
+    fontWeight: '600',
   },
   button: {
     flexShrink: 1,

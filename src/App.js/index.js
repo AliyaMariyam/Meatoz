@@ -1,39 +1,50 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from '../Screens/Login';
-import QuestionList from '../Screens/QuestionList';
-import AskQuestion from '../Screens/AskQuestion';
-import {Provider} from 'react-redux';
-import {store} from '../Redux/store';
-import {useSelector} from 'react-redux';
+import Home from '../Screens/Home';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Categories from '../Screens/Categories';
+import Profile from '../Screens/Profile';
+import MyCart from '../Screens/MyCart';
+import CustomFooter from '../Components/CustomFooter';
 
 const stack = createNativeStackNavigator();
 
-const AppNavigation = () => {
-  const isLoggedIn = useSelector(state => state.isLoggedIn);
+const Tab = createBottomTabNavigator();
+
+const MyTabs = () => {
   return (
-    <NavigationContainer>
-      <stack.Navigator screenOptions={{headerShown: false}}>
-        {isLoggedIn ? (
-          <>
-            <stack.Screen name="QuestionList" component={QuestionList} />
-            <stack.Screen name="AskQuestion" component={AskQuestion} />
-          </>
-        ) : (
-          <stack.Screen name="Login" component={Login} />
-        )}
-      </stack.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator
+      tabBar={props => <CustomFooter {...props} />}
+      screenOptions={{
+        headerTitleAlign: 'left',
+        headerTitleStyle: {
+          fontFamily: 'Lato-Bold', 
+        fontSize: 24,
+        },
+        headerStyle: {
+          height: 60,
+        },
+        headerShown:false,
+      }}>
+      <Tab.Screen name="MEATOZ" component={Home} />
+      <Tab.Screen name="CATEGORIES" component={Categories} />
+      <Tab.Screen name="PROFILE" component={Profile} />
+      <Tab.Screen name="MYCART" component={MyCart} />
+    </Tab.Navigator>
   );
 };
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <AppNavigation />
-    </Provider>
+    <NavigationContainer>
+      <stack.Navigator screenOptions={{headerShown: false}} >
+        <stack.Screen name="MyTabs" component={MyTabs} />
+      </stack.Navigator>
+    </NavigationContainer>
   );
 };
+
+
 
 export default App;
